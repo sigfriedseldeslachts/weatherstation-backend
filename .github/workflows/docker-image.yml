@@ -1,0 +1,35 @@
+name: Build website container
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set lowercase owner name
+      run: |
+        echo "OWNER_LC=${OWNER,,}" >>${GITHUB_ENV}
+      env:
+        OWNER: '${{ github.repository_owner }}'
+
+    - name: Login to Github Container Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ghcr.io
+        username: ${{ env.OWNER_LC }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and Push
+      uses: docker/build-push-action@v2
+      with:
+        push: true
+        tags: ghcr.io/${{ env.OWNER_LC }}/weather-station-backend:latest

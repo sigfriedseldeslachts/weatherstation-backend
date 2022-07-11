@@ -1,0 +1,7 @@
+target
+.git
+.idea
+src/main/resources/application.properties
+.gitignore
+weather-station-backend.iml
+Dockerfile

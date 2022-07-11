@@ -32,15 +32,19 @@ public class MqttListener implements IMqttMessageListener {
             return;
         }
 
-        // Create SensorValue object
-        SensorValue sensorValue = new SensorValue(
-                Float.parseFloat(mqttMessage.toString()),
-                sensor
-        );
+        try {
+            // Create SensorValue object
+            SensorValue sensorValue = new SensorValue(
+                    Float.parseFloat(mqttMessage.toString()),
+                    sensor
+            );
 
-        // Send to websocket clients
-        this.template.convertAndSend("/measurements/update", Collections.singletonMap(sensor, sensorValue));
+            // Send to websocket clients
+            this.template.convertAndSend("/measurements/update", Collections.singletonMap(sensor, sensorValue));
 
-        cache.put(sensorValue);
+            cache.put(sensorValue);
+        } catch (NumberFormatException ignored) {} catch (Exception e) {
+            LoggerFactory.getLogger(MqttListener.class).error("Error parsing MQTT message", e);
+        }
     }
 }
