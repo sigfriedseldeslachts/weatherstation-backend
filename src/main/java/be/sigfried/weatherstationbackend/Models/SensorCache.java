@@ -1,11 +1,11 @@
 package be.sigfried.weatherstationbackend.Models;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SensorCache {
 
-    private final Map<SensorType, SensorValue> cache = new HashMap<>();
+    private final Map<SensorType, SensorValue> cache = new ConcurrentHashMap<>();
 
     public Map<SensorType, SensorValue> getCache() {
         return cache;

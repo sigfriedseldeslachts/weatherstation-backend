@@ -34,6 +34,10 @@ public class ResponseHandler {
         return generateResponse(null, HttpStatus.OK, responseObj, null);
     }
 
+    public static ResponseEntity<Object> generateResponse(Object responseObj, HttpStatus status) {
+        return generateResponse(null, status, responseObj, null);
+    }
+
     public static ResponseEntity<Object> generateResponse(Object responseObj, Map<String, Object> additionalData) {
         return generateResponse(null, HttpStatus.OK, responseObj, additionalData);
     }

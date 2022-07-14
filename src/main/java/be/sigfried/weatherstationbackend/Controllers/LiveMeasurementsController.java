@@ -25,11 +25,14 @@ public class LiveMeasurementsController {
     @Value("${INFLUX_BUCKET}")
     public String INFLUX_BUCKET;
 
-    @Autowired
-    public DataQuery dataQuery;
+    private final DataQuery dataQuery;
 
-    @Autowired
-    public SensorCache cache;
+    private final SensorCache cache;
+
+    public LiveMeasurementsController(DataQuery dataQuery, SensorCache cache) {
+        this.dataQuery = dataQuery;
+        this.cache = cache;
+    }
 
     @GetMapping("")
     public ResponseEntity<Object> getLiveMeasurements() {

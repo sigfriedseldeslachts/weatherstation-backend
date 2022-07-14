@@ -37,6 +37,7 @@ public class MqttConfig {
         MqttConnectOptions options = new MqttConnectOptions();
         options.setUserName(MQTT_USERNAME);
         options.setPassword(MQTT_PASSWORD.toCharArray());
+        options.setAutomaticReconnect(true);
 
         client.connect(options);
         client.subscribe("weatherstation/#", (new MqttListener(template, cache)));
