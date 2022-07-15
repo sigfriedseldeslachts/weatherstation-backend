@@ -4,17 +4,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import io.lettuce.core.SetArgs;
-import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.sync.RedisCommands;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.time.Duration;
-import java.time.Instant;
-import java.util.Map;
-import java.util.TreeMap;
 import java.util.concurrent.Callable;
 
 public class Cache {
@@ -40,7 +32,7 @@ public class Cache {
             return get(cacheKey);
         } else {
             String value = objectMapper.writeValueAsString(action.call());
-            redisCommands.setex(cacheKey, duration.toMillis(), value);
+            redisCommands.setex(cacheKey, duration.toSeconds(), value);
             return value;
         }
     }
