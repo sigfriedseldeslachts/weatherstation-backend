@@ -33,7 +33,7 @@ public class MqttConfig {
     @Bean
     public IMqttClient mqttInputChannel() throws MqttException {
         LoggerFactory.getLogger(MqttConfig.class).info("Connecting to MQTT broker...");
-        MqttClient client = new MqttClient(MQTT_HOST, "java-weather-station-backend");
+        MqttClient client = new MqttClient(MQTT_HOST, MqttClient.generateClientId());
         MqttConnectOptions options = new MqttConnectOptions();
         options.setUserName(MQTT_USERNAME);
         options.setPassword(MQTT_PASSWORD.toCharArray());
