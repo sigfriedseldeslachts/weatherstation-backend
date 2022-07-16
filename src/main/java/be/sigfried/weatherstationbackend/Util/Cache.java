@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.lettuce.core.api.sync.RedisCommands;
+import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.concurrent.Callable;
@@ -38,10 +39,20 @@ public class Cache {
     }
 
     public <T> T remember(String cacheKey, Callable<Object> action, Duration duration, Class<T> valueType) throws Exception {
-        return objectMapper.readValue(remember(cacheKey, action, duration), valueType);
+        try {
+            return objectMapper.readValue(remember(cacheKey, action, duration), valueType);
+        } catch (Exception e) {
+            LoggerFactory.getLogger(Cache.class).error("Error while reading from cache", e);
+            return null;
+        }
     }
 
-    public <T> T remember(String cacheKey, Callable<Object> action, Duration duration, TypeReference<T> valueType) throws Exception {
-        return objectMapper.readValue(remember(cacheKey, action, duration), valueType);
+    public <T> T remember(String cacheKey, Callable<Object> action, Duration duration, TypeReference<T> valueType) {
+        try {
+            return objectMapper.readValue(remember(cacheKey, action, duration), valueType);
+        } catch (Exception e) {
+            LoggerFactory.getLogger(Cache.class).error("Error while reading from cache", e);
+            return null;
+        }
     }
 }
