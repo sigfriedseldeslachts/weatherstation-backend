@@ -46,6 +46,7 @@ public class MeasurementRepository {
                 .aggregateWindow()
                 .withEvery("60s")
                 .withAggregateFunction("mean")
+                .map(DataQuery.getQueryMapFunctionForAllSensors())
                 .limit(120);
 
         return dataQuery.getData(flux);
@@ -74,9 +75,10 @@ public class MeasurementRepository {
                     .filter(Restrictions.or(DataQuery.getRestrictionsForAllSensors())) // For all sensors
                     .filter(Restrictions.field().equal("value"))
                     .aggregateWindow()
-                    .withEvery("60m")
+                    .withEvery("30m")
                     .withAggregateFunction("mean")
-                    .limit(24);
+                    .map(DataQuery.getQueryMapFunctionForAllSensors())
+                    .limit(48);
 
             return dataQuery.getData(flux);
         }, HistoryEnum.day.getCacheLength(), new TypeReference<HashMap<String, TreeMap<Instant, Object>>>() {});
@@ -105,9 +107,10 @@ public class MeasurementRepository {
                     .filter(Restrictions.or(DataQuery.getRestrictionsForAllSensors())) // For all sensors
                     .filter(Restrictions.field().equal("value"))
                     .aggregateWindow()
-                    .withEvery("1d")
+                    .withEvery("12h")
                     .withAggregateFunction("mean")
-                    .limit(7);
+                    .map(DataQuery.getQueryMapFunctionForAllSensors())
+                    .limit(14);
 
             return dataQuery.getData(flux);
         }, HistoryEnum.week.getCacheLength(), new TypeReference<HashMap<String, TreeMap<Instant, Object>>>() {});
@@ -138,6 +141,7 @@ public class MeasurementRepository {
                     .aggregateWindow()
                     .withEvery("1d")
                     .withAggregateFunction("mean")
+                    .map(DataQuery.getQueryMapFunctionForAllSensors())
                     .limit(30);
 
             return dataQuery.getData(flux);

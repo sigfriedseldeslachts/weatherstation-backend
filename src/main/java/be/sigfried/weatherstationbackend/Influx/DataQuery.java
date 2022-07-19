@@ -6,7 +6,6 @@ import com.influxdb.query.FluxRecord;
 import com.influxdb.query.FluxTable;
 import com.influxdb.query.dsl.Flux;
 import com.influxdb.query.dsl.functions.restriction.Restrictions;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -50,6 +49,11 @@ public class DataQuery {
 
     public static Restrictions[] getRestrictionsForAllSensors() {
         return getRestrictionsForSensors(List.of(SensorType.values()));
+    }
+
+    public static String getQueryMapFunctionForAllSensors() {
+        // If the sensor is a pressure sensor, calculate it to hPa instead of Pa
+        return "({r with _value: if r.entity_id == \"weer_station_luchtdruk\" then r._value / 100.0 else r._value })";
     }
 
 }
